@@ -22,10 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-RecyclerView recyclerView;
-ResultAdapter resultAdapter;
+    RecyclerView recyclerView;
+    ResultAdapter resultAdapter;
     List<Result> resultList = new ArrayList<>();
     TextView textView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,9 +37,9 @@ ResultAdapter resultAdapter;
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        recyclerView=findViewById(R.id.recycler_view);
-        textView=findViewById(R.id.textView);
-        textView.setOnClickListener(v->{
+        recyclerView = findViewById(R.id.recycler_view);
+        textView = findViewById(R.id.textView);
+        textView.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, AddResultActivity.class));
         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(MainActivity.this);
@@ -51,11 +52,15 @@ ResultAdapter resultAdapter;
                 resultList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Result result = snapshot.getValue(Result.class);
-                    resultList.add(result);
+                    if (!resultList.contains(result)) {
+                        resultList.add(result);
+                    }
+
+
                 }
                 // Pass the resultList to the RecyclerView adapter
 
-                resultAdapter=new ResultAdapter(resultList,MainActivity.this);
+                resultAdapter = new ResultAdapter(resultList, MainActivity.this);
                 recyclerView.setAdapter(resultAdapter);
             }
 

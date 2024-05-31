@@ -47,28 +47,20 @@ public class AddResultActivity extends AppCompatActivity {
 
             int score = Integer.parseInt(scoreStr);
             DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Results");
-            valueEventListener=new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    String key=databaseReference.push().getKey();
-                    Result result = new Result(id, name, score, grade,key);
-                    databaseReference.child(key).setValue(result).addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(AddResultActivity.this, "Result added successfully", Toast.LENGTH_SHORT).show();
-                            finish();
-                        } else {
-                            Toast.makeText(AddResultActivity.this, "Failed to add result", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    databaseReference.removeEventListener(valueEventListener);
-                }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+            String key = databaseReference.push().getKey();
+            Result result = new Result(id, name, score, grade, key);
 
+// Add the result directly to the database
+            databaseReference.child(key).setValue(result).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(AddResultActivity.this, "Result added successfully", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(AddResultActivity.this, "Failed to add result", Toast.LENGTH_SHORT).show();
                 }
-            };
-            databaseReference.addValueEventListener(valueEventListener);
+            });
+
 
 
         });
